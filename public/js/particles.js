@@ -126,8 +126,7 @@ function createWalls() {
 // User Interface
 
 function bindControls() {
-    $(document)
-    .mouseup(onMouseUp);
+    $(document).mouseup(onMouseUp);
 
     $('#whatever').click(function () {
         sim.link('particles', 'particles shapes global wind');

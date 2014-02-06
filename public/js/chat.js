@@ -1,17 +1,18 @@
-var sendChannel, receiveChannel;
+/* global $ */
 
-var startButton = document.getElementById("startButton");
-var sendButton = document.getElementById("sendButton");
-var closeButton = document.getElementById("closeButton");
-startButton.disabled = false;
-sendButton.disabled = true;
-closeButton.disabled = true;
-startButton.onclick = createConnection;
-sendButton.onclick = sendData;
-closeButton.onclick = closeDataChannels;
+'use strict';
 
-function trace(text) {
-  console.log((performance.now() / 1000).toFixed(3) + ": " + text);
+createConnection();
+
+$('#chat-input').keypress(function (e) {
+    if (e.which === 13) {
+        send($('#chat-input').val());
+        $('#chat-input').val('');
+        return false;
+    }
+});
+
+function send(msg) {
 }
 
 function createConnection() {
@@ -44,6 +45,19 @@ function createConnection() {
   localPeerConnection.createOffer(gotLocalDescription);
   startButton.disabled = true;
   closeButton.disabled = false;
+}
+
+/* var sendChannel, receiveChannel;
+
+var sendButton = document.getElementById("sendButton");
+var closeButton = document.getElementById("closeButton");
+sendButton.onclick = sendData;
+closeButton.onclick = closeDataChannels;
+
+
+
+function trace(text) {
+  console.log((performance.now() / 1000).toFixed(3) + ": " + text);
 }
 
 function sendData() {
@@ -133,4 +147,4 @@ function handleSendChannelStateChange() {
 function handleReceiveChannelStateChange() {
   var readyState = receiveChannel.readyState;
   trace('Receive channel state is: ' + readyState);
-}
+} */
