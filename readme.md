@@ -1,6 +1,4 @@
-# Swarming
-
-![Codeship Status](https://www.codeship.io/projects/1872f910-7115-0131-6fb2-02b7b70e8a0a/status)
+# Swarming [![Build Status](https://travis-ci.org/floatdrop/swarming.png?branch=master)](https://travis-ci.org/floatdrop/swarming)
 
 Experimental multiplayer game with decentralized networking
 
