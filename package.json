@@ -10,7 +10,7 @@
     "test": "mocha tests/*.test.js -R spec -t 10000",
     "start": "server/app.js"
   },
-  "version": "0.0.1-8",
+  "version": "0.0.1",
   "dependencies": {
     "express": "~3.4.8"
   },
