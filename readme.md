@@ -1,6 +1,6 @@
 # Swarming
 
-[ ![Codeship Status for floatdrop/swarming](https://www.codeship.io/projects/1872f910-7115-0131-6fb2-02b7b70e8a0a/status?branch=master)](https://www.codeship.io/projects/13526)
+[ ![Codeship Status for floatdrop/swarming](https://www.codeship.io/projects/798ebc40-7140-0131-93ce-5afbd1ca4229/status?branch=master)](https://www.codeship.io/projects/13545)
 
 Experimental multiplayer game with decentralized networking
 
