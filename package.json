@@ -1,0 +1,26 @@
+{
+  "name": "swarming",
+  "private": true,
+  "author": {
+    "name": "Vsevolod Strukchinsky",
+    "email": "floatdrop@gmail.com"
+  },
+  "main": "server/index.js",
+  "scripts": {
+    "test": "mocha tests/*.test.js -R spec -t 10000",
+    "start": "server/app.js"
+  },
+  "version": "0.0.1-8",
+  "dependencies": {
+    "express": "~3.4.8"
+  },
+  "devDependencies": {
+    "mocha": "~1.17.1",
+    "chai": "~1.9.0",
+    "supertest": "~0.9.0"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "subdomain": "swarming"
+}
