@@ -1,10 +1,10 @@
 language: node_js
 node_js:
-  - '0.10'
+- '0.10'
 deploy:
   provider: nodejitsu
   user: floatdrop
   api_key:
-    secure: kg39yfbX8ZfO5ictqcrLK6DRDd1D4QXotWx3F2JhSun00WQG3g5BGT/+tKD06UxQU/MtTWNx5N8oG2QzvIUNdgeNVlU/ey8hSiRe1Orfc7lSBqkUwHiIxCXwLM3ZH2c9jt+5NyeUTKBtB7UVI/8j7OH8uwkfwEm3n05ECGeOenQ=
+    secure: OxYjE7tZgNSbMPZgpEPklorsLgme+s6d9TPdCSZttH8yjLswoks5dtYLlevign2J1r6QwogT0jeil1chIPNgQhUM94zWj/Fm6ll9SR6KM9m3lkUFEp5FdtR3r6bjEA74W77eMBV02Qp8oRbbh3RZ/v6Qk0ajaF4/OJmMBvNDHXo=
   on:
     repo: floatdrop/swarming
