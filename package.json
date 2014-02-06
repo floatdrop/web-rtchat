@@ -8,7 +8,7 @@
   "main": "server/index.js",
   "scripts": {
     "test": "mocha tests/*.test.js -R spec -t 10000",
-    "start": "server/app.js"
+    "start": "node server/app.js"
   },
   "version": "0.0.1",
   "dependencies": {
