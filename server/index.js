@@ -8,7 +8,7 @@ if (process.env.NODETIME) {
 }
 
 var server = require('http').createServer(require('./app.js')),
-    port = 8080,
+    port = Number(process.env.PORT || 5000),
     url  = 'http://localhost:' + port + '/';
 
 if (process.env.SUBDOMAIN) {
