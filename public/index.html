@@ -2,6 +2,14 @@
 <html>
 <head>
 	<title>Swarming</title>
+    <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+    <script>
+        var peer = new Peer({
+            host: '/',
+            port: window.location.hostname === 'localhost' ? 5000 : 80,
+            path: 'api'
+        });
+    </script>
 </head>
 <body>
 <h1>Soon here will be something...</h1>
