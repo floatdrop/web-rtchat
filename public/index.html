@@ -1,17 +1,41 @@
 <!DOCTYPE html>
-<html>
 <head>
-	<title>Swarming</title>
-    <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
-    <script>
-        var peer = new Peer({
-            host: '/',
-            port: window.location.hostname === 'localhost' ? 5000 : 80,
-            path: 'api'
-        });
-    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Swarming experiment</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel='stylesheet' type='text/css' href='/css/style.css' />
+    <link rel="shortcut icon" href="/images/favicon.png">
 </head>
 <body>
-<h1>Soon here will be something...</h1>
+    <div class='wrap'>
+      <ul class='stats'>
+        <li>fps:<span id='fps'></span></li>
+        <li>particles:<span id='particles'></span></li>
+        <li>edges:<span id='edges'></span></li>
+        <li>constraints:<span id='constraints'></span></li>
+        <li>forces:<span id='forces'></span></li>
+    </ul>
+    <canvas id="display" width='1280' height='450'></canvas>
+    <p class='caption'>
+        <div id="chat"></div>
+        <br/>
+        <input type="text" id="chat-input"/>
+    </p>
+</div>
+<script type="text/javascript" src="/js/lib/jquery.min.js"></script>
+<script src="/js/lib/newton.js"></script>
+<script src="/js/particles.js"></script>
+<script src="/js/chat.js"></script>
+<script src="/js/lib/ga.js"></script>
+<script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+<script>
+    var peer = new Peer({
+        host: '/',
+        port: window.location.hostname === 'localhost' ? 5000 : 80,
+        path: 'api'
+    });
+</script>
 </body>
 </html>

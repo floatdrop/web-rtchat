@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+'use strict';
 
 var restify = require('restify');
 
@@ -25,7 +25,12 @@ server.on('disconnect', function (id) {
     console.log('disconnected ' + id);
 });
 
-server._app.get('/?.*', restify.serveStatic({
+server._app.get('/players', function (req, res, next) {
+    res.send(require('util').inspect(server._clients, { showHidden: true, depth: 3 }));
+    return next();
+});
+
+server._app.get('/.*', restify.serveStatic({
   directory: './public',
   default: 'index.html'
 }));
