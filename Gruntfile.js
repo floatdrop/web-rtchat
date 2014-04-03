@@ -59,22 +59,17 @@ module.exports = function (grunt) {
             },
             livereload: {
                 options: {
-                    bases: ['.tmp', yeomanConfig.app],
-                    // middleware: function (connect) {
-                    //     return [
-                    //         lrSnippet
-                    //     ];
-                    // }
+                    node_env: 'development'
                 }
             },
             test: {
                 options: {
-                    bases: ['public/.test', '.tmp']
+                    node_env: 'testing'
                 }
             },
             dist: {
                 options: {
-                    bases: [yeomanConfig.dist]
+                    node_env: 'production'
                 }
             }
         },
