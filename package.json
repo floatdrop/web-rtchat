@@ -7,7 +7,7 @@
   },
   "main": "server/index.js",
   "scripts": {
-    "test": "mocha tests/*.test.js -R spec -t 10000",
+    "test": "grunt test",
     "start": "node server"
   },
   "version": "0.0.1",
