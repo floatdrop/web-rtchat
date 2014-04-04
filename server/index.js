@@ -1,5 +1,7 @@
 'use strict';
 
+var PeerServer = require('peer').PeerServer;
+
 if (process.env.NODETIME) {
     require('nodetime').profile({
         accountKey: process.env.NODETIME,
@@ -14,10 +16,6 @@ if (process.env.SUBDOMAIN) {
     url = 'http://' + process.env.SUBDOMAIN + '.herokuapp.com/';
 }
 
-'use strict';
-
-var PeerServer = require('peer').PeerServer;
-
 var app = require('./app');
 
 var server = app.listen(port);
@@ -29,13 +27,6 @@ var peerServer = PeerServer({
 
 app.use(peerServer);
 
-peerServer.on('connection', function (id) {
-    console.log('connected ' + id);
-});
-
-peerServer.on('disconnect', function (id) {
-    console.log('disconnected ' + id);
-});
+app.initialize(peerServer);
 
 console.log('Server listening on port ' + port);
-console.log(url);

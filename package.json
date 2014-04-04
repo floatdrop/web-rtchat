@@ -8,11 +8,13 @@
   "main": "server/index.js",
   "scripts": {
     "test": "mocha tests/*.test.js -R spec",
-    "start": "node server"
+    "start": "node server",
+    "postinstall": "bower install"
   },
   "version": "0.0.1",
   "dependencies": {
     "express": "^3.5.1",
+    "bower": "^0.6.0",
     "nodetime": "^0.8.15",
     "peer": "https://github.com/floatdrop/peerjs-server/tarball/express"
   },
