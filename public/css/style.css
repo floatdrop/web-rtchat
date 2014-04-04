@@ -2,3 +2,16 @@
 .ember-application {
     margin: 20px;
 }
+
+.nav-pills a {
+    cursor: pointer;
+}
+
+.nav-pills li.green a {
+    color: green;
+}
+
+.nav-pills li.green.active a:hover {
+    color: white;
+    background-color: green;
+}

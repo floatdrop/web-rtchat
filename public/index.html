@@ -1,50 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Ember Starter Kit</title>
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <script type="text/x-handlebars">
-    <h1>Chat demo</h1>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Swarm</title>
 
-    {{outlet}}
-  </script>
-
-  <script type="text/x-handlebars" id="index">
-    <ul>
-    {{#each item in model}}
-      <li>{{item}}</li>
-    {{/each}}
-    </ul>
-  </script>
-
-  <script src="js/libs/jquery-1.10.2.js"></script>
-  <script src="js/libs/handlebars-1.1.2.js"></script>
-  <script src="js/libs/ember-1.5.0.js"></script>
-
-    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-
-    <!-- Optional theme -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron-narrow.css" rel="stylesheet">
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</head>
 
-  <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
-  <script>
-      var peer = new Peer({
-          host: '/',
-          port: window.location.hostname === 'localhost' ? 5000 : 80,
-          path: '/api/'
-      });
-  </script>
+<body>
+    <script type="text/x-handlebars">
+        <div class="container">
+            <div class="header">
+                {{view App.ActiveRoomsView}}
+                <h3 class="text-muted">Swarm</h3>
+            </div>
 
-  <script src="js/app.js"></script>
-  <!-- to activate the test runner, add the "?test" query string parameter -->
-  <script src="tests/runner.js"></script>
+            {{outlet}}
+        </div>
+    </script>
+
+    <script type="text/x-handlebars" id="room">
+        <div class="chat">
+          <div class="row">
+            <div class="col-md-8">
+                <pre>{{#each message in model.messages}}<span class='pull-right text-muted'>{{format-date message.date}}</span>{{message.author}}: {{message.content}}
+{{/each}}</pre>
+            </div>
+            <div class="col-md-4">
+                {{#each user in model.users}}
+                    <p>{{user}}</p>
+                {{/each}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+                {{input class="form-control"}}
+            </div>
+          </div>
+        </div>
+    </script>
+
+    <script type="text/x-handlebars" id="join">
+        <div class="jumbotron">
+          <p>{{input value=roomName id='roomToJoin' class="form-control input-lg" placeholder="Funny-name"}}</p>
+          <p><a {{action goToLink roomName}} class="btn btn-lg btn-success" role="button">Join</a></p>
+        </div>
+    </script>
+
+    <script type="text/x-handlebars" id="active-rooms">
+        <ul class="nav nav-pills pull-right">
+            {{#link-to "join" tagName="li" href=false}}<a {{bind-attr href="view.href"}}>Rooms</a>{{/link-to}}
+            {{#each room in view.rooms}}
+                {{#link-to "room.view" room tagName="li" class="permalink"}}
+                    {{#link-to "room.view" room}}
+                        {{room}}
+                    {{/link-to}}
+                {{/link-to}}
+            {{/each}}
+        </ul>
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.0/ember.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+    <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+    <script src="js/app.js"></script>
+    <!-- to activate the test runner, add the "?test" query string parameter -->
+    <script src="tests/runner.js"></script>
 </body>
 </html>
