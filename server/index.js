@@ -16,12 +16,9 @@ if (process.env.SUBDOMAIN) {
 
 'use strict';
 
-var express = require('express');
 var PeerServer = require('peer').PeerServer;
 
-var app = express();
-
-app.use(express.static(__dirname + '/../public'));
+var app = require('./app');
 
 var server = app.listen(port);
 
