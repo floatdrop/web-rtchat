@@ -33,21 +33,28 @@
         <div class="chat">
           <div class="row">
             <div class="col-md-8">
-                <pre>{{#each message in model.messages}}<span class='pull-right text-muted'>{{format-date message.date}}</span>{{message.author}}: {{message.content}}
-{{/each}}</pre>
+                {{view App.ChatMessagesView}}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 hidden-sm hidden-xs">
                 {{#each user in model.users}}
                     <p>{{user}}</p>
                 {{/each}}
             </div>
           </div>
           <div class="row">
-            <div class="col-md-8">
-                {{input class="form-control" id="message"  type="text" value=message action="sendMessage"}}
+            <div class="col-md-6">
+                {{input class="form-control" autocomplete="off" id="message" type="text" value=message action="sendMessage"}}
+            </div>
+            <div class="col-md-2">
+                <button {{action sendMessage target="controller"}} class="form-control btn btn-success">Send</button>
             </div>
           </div>
         </div>
+    </script>
+
+    <script type="text/x-handlebars" id="chat-messages">
+        <pre id="messages">{{#each message in messages}}<span class='pull-right text-muted'>{{format-date message.date}}</span>{{message.author}}: {{message.content}}
+{{/each}}</pre>
     </script>
 
     <script type="text/x-handlebars" id="join">

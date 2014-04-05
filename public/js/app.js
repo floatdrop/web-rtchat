@@ -1,4 +1,4 @@
-/* global App:true, Ember, Em, moment */
+/* global App:true, Ember, Em, moment, $ */
 (function () {
 
     App = Ember.Application.create();
@@ -12,15 +12,26 @@
 
     App.RoomController = Em.ObjectController.extend({
         actions: {
-            sendMessage: function (message) {
-                this.get('model').get('messages').pushObject({
+            sendMessage: function () {
+                this.get('messages').pushObject({
                     author: 'Name',
-                    content: message,
+                    content: this.get('message'),
                     date: Date()
                 });
                 this.set('message', '');
             }
         }
+    });
+
+    App.ChatMessagesView = Ember.View.extend({
+        templateName: 'chat-messages',
+        messagesChanged: function () {
+            setTimeout(function () {
+                var messages = $('#messages');
+                var height = messages[0].scrollHeight;
+                messages.scrollTop(height);
+            }, 10);
+        }.observes('controller.messages.@each').on('didInsertElement')
     });
 
     App.RoomRoute = Ember.Route.extend({

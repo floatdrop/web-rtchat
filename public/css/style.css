@@ -15,3 +15,8 @@
     color: white;
     background-color: green;
 }
+
+#messages {
+    height: 300px;
+    overflow-y: scroll;
+}
