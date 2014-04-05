@@ -8,8 +8,7 @@
   "main": "server/index.js",
   "scripts": {
     "test": "mocha tests/*.test.js -R spec",
-    "start": "node server",
-    "postinstall": "bower install"
+    "start": "node server"
   },
   "version": "0.0.1",
   "dependencies": {
