@@ -13,7 +13,7 @@
         actions: {
             sendMessage: function () {
                 this.get('messages').pushObject({
-                    author: this.get('name'),
+                    author: this.get('user.name'),
                     content: this.get('message'),
                     date: Date()
                 });
@@ -33,53 +33,62 @@
         }.observes('controller.messages.@each').on('didInsertElement')
     });
 
-    App.UsersListController = Em.ObjectController.extend({
-        actions: {
-            alertModel: function () {
-                console.log(this.get('model'));
-            }
-        }
-    });
-
-    App.Users = Em.Object.create({
-        users: []
-    });
-
     var rooms = {};
     var peers = {};
+
+    function greetUser(id) {
+        // var peer = peers[id] || new Peer()
+    }
+
+    function fetchUsers(id) {
+        var self = this;
+        $.getJSON('/api/folks/' + this.get('room.name'))
+            .done(function (folks) {
+                folks.forEach(function (user) {
+                    if (user.id === id) {
+                        self.set('user', {
+                            name: user.name,
+                            id: id
+                        });
+                    }
+                    var users = self.get('users');
+                    for (var i = users.length - 1; i >= 0; i--) {
+                        if (users[i].id === user.id) { return false; }
+                    }
+                    greetUser(user.id);
+                    users.pushObject(user);
+                });
+            });
+    }
 
     App.RoomRoute = Ember.Route.extend({
         model: function (params) {
             var room = params.room_name;
-            this.set('currentRoom', room);
-            var self = this;
-            return rooms[room] || $.getJSON('/api/room/' + room)
+
+            if (rooms[room]) { return rooms[room]; }
+
+            var model = Em.Object.create({
+                users: [],
+                room: {
+                    name: room
+                }
+            });
+
+            $.getJSON('/api/room/' + room)
                 .done(function (data) {
                     peers[room] = new Peer(data.id, {
                         host: '/',
                         port: window.location.hostname === 'localhost' ? 5000 : 80,
                         path: '/api/'
                     });
+                    peers[room].on('open', fetchUsers.bind(model, data.id));
 
-                    peers[room].on('open', function () {
-                        $.getJSON('/api/folks/' + self.get('currentRoom'))
-                            .done(function (folks) {
-                                folks.forEach(function (user) {
-                                    if (user.id === data.id) {
-                                        self.controllerFor('room').set('name', user.name);
-                                    }
-                                    var users = App.Users.get('users');
-                                    for (var i = users.length - 1; i >= 0; i--) {
-                                        if (users[i].id === user.id) { return false; }
-                                    }
-                                    App.Users.get('users').pushObject(user);
-                                });
-                            });
-                    });
-
-                    rooms[room] = data;
-                    return data;
+                    model.setProperties(data);
                 });
+
+            rooms[room] = model;
+
+            return model;
         }
     });
 
@@ -94,7 +103,7 @@
         actions: {
             goToLink: function (item) {
                 App.ActiveRoomsView.rooms.addObject(item);
-                this.transitionTo('room.view', item);
+                this.transitionTo('room', item);
             }
         }
     });
