@@ -16,7 +16,8 @@ var pending = {};
 
 app.get('/api/folks/:room', function (req, res, next) {
     var room = req.params.room;
-    if (!room) { return res.send(403); }
+    if (!room) { return res.send(400); }
+    if (!rooms[room]) { return res.send(404); }
 
     res.json(_.map(rooms[room].users, function (user) {
         return {
@@ -28,7 +29,7 @@ app.get('/api/folks/:room', function (req, res, next) {
 
 app.get('/api/room/:room', function (req, res, next) {
     var room = req.params.room;
-    if (!room) { return res.send(403); }
+    if (!room) { return res.send(400); }
 
     if (!rooms[room]) {
         rooms[room] = {
