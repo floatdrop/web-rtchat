@@ -36,9 +36,7 @@
                 {{view App.ChatMessagesView}}
             </div>
             <div class="col-md-4 hidden-sm hidden-xs">
-                {{#each user in model.users}}
-                    <p>{{user}}</p>
-                {{/each}}
+                {{render "users-list" App.Users}}
             </div>
           </div>
           <div class="row">
@@ -50,6 +48,13 @@
             </div>
           </div>
         </div>
+    </script>
+
+    <script type="text/x-handlebars" id="users-list">
+        <h4 class="text-muted" {{action alertModel target="controller"}}>Users:</h4>
+        {{#each user in model.users}}
+            <p>{{user.name}}</p>
+        {{/each}}
     </script>
 
     <script type="text/x-handlebars" id="chat-messages">
@@ -68,8 +73,8 @@
         <ul class="nav nav-pills pull-right">
             {{#link-to "join" tagName="li" href=false}}<a {{bind-attr href="view.href"}}>Rooms</a>{{/link-to}}
             {{#each room in view.rooms}}
-                {{#link-to "room.view" room tagName="li" class="permalink"}}
-                    {{#link-to "room.view" room}}
+                {{#link-to "room" room tagName="li" class="permalink"}}
+                    {{#link-to "room" room}}
                         {{room}}
                     {{/link-to}}
                 {{/link-to}}

@@ -1,20 +1,19 @@
-/* global App:true, Ember, Em, moment, $ */
+/* global App:true, Ember, Em, moment, $, Peer */
 (function () {
 
     App = Ember.Application.create();
 
     App.Router.map(function () {
         this.resource('join', { path: '/' });
-        this.resource('room', function () {
-            this.route('view', { path: '/:room_name' });
-        });
+        this.resource('room', { path: '/room/:room_name' });
     });
 
     App.RoomController = Em.ObjectController.extend({
+        name: 'Unknown',
         actions: {
             sendMessage: function () {
                 this.get('messages').pushObject({
-                    author: 'Name',
+                    author: this.get('name'),
                     content: this.get('message'),
                     date: Date()
                 });
@@ -30,24 +29,48 @@
                 var messages = $('#messages');
                 var height = messages[0].scrollHeight;
                 messages.scrollTop(height);
-            }, 10);
+            }, 0);
         }.observes('controller.messages.@each').on('didInsertElement')
     });
 
+    App.UsersListController = Em.ObjectController.extend({
+        actions: {
+            alertModel: function () {
+                console.log(this.get('model'));
+            }
+        }
+    });
+
+    App.Users = Em.Object.create({
+        users: []
+    });
+
+    var peers = {};
+
     App.RoomRoute = Ember.Route.extend({
-        model: function () {
-            return Em.Object.create({
-                messages: [{
-                    author: 'Name',
-                    content: 'Hello!',
-                    date: Date()
-                }, {
-                    author: 'Anonymous',
-                    content: 'Hi!',
-                    date: Date()
-                }],
-                users: ['Name', 'Anonymous']
-            });
+        model: function (params) {
+            this.set('currentRoom', params.room_name);
+            var self = this;
+            return $.getJSON('/api/room/' + params.room_name)
+                .done(function (data) {
+                    peers[data.id] = new Peer(data.id, {
+                        host: '/',
+                        port: window.location.hostname === 'localhost' ? 5000 : 80,
+                        path: '/api/'
+                    });
+                    peers[data.id].on('open', function () {
+                        $.getJSON('/api/folks/' + self.get('currentRoom'))
+                            .done(function (folks) {
+                                folks.forEach(function (user) {
+                                    if (user.id === data.id) {
+                                        self.controllerFor('room').set('name', user.name);
+                                    }
+                                    App.Users.get('users').pushObject(user);
+                                });
+                            });
+                    });
+                    return data;
+                });
         }
     });
 
@@ -70,11 +93,5 @@
     Ember.Handlebars.helper('format-date', function (value, options) {
         return moment(value).calendar(options);
     });
-
-// var peer = new Peer({
-//     host: '/',
-//     port: window.location.hostname === 'localhost' ? 5000 : 80,
-//     path: '/api/'
-// });
 
 })();

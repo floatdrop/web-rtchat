@@ -12,10 +12,13 @@
   },
   "version": "0.0.1",
   "dependencies": {
-    "express": "^3.5.1",
     "bower": "^0.6.0",
+    "express": "^3.5.1",
+    "lodash": "^2.4.1",
     "nodetime": "^0.8.15",
-    "peer": "https://github.com/floatdrop/peerjs-server/tarball/express"
+    "peer": "https://github.com/floatdrop/peerjs-server/tarball/express",
+    "sillyname": "0.0.3",
+    "uuid": "^1.4.1"
   },
   "devDependencies": {
     "mocha": "^1.17.1",
