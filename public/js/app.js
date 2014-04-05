@@ -45,30 +45,39 @@
         users: []
     });
 
+    var rooms = {};
     var peers = {};
 
     App.RoomRoute = Ember.Route.extend({
         model: function (params) {
-            this.set('currentRoom', params.room_name);
+            var room = params.room_name;
+            this.set('currentRoom', room);
             var self = this;
-            return $.getJSON('/api/room/' + params.room_name)
+            return rooms[room] || $.getJSON('/api/room/' + room)
                 .done(function (data) {
-                    peers[data.id] = new Peer(data.id, {
+                    peers[room] = new Peer(data.id, {
                         host: '/',
                         port: window.location.hostname === 'localhost' ? 5000 : 80,
                         path: '/api/'
                     });
-                    peers[data.id].on('open', function () {
+
+                    peers[room].on('open', function () {
                         $.getJSON('/api/folks/' + self.get('currentRoom'))
                             .done(function (folks) {
                                 folks.forEach(function (user) {
                                     if (user.id === data.id) {
                                         self.controllerFor('room').set('name', user.name);
                                     }
+                                    var users = App.Users.get('users');
+                                    for (var i = users.length - 1; i >= 0; i--) {
+                                        if (users[i].id === user.id) { return false; }
+                                    }
                                     App.Users.get('users').pushObject(user);
                                 });
                             });
                     });
+
+                    rooms[room] = data;
                     return data;
                 });
         }
