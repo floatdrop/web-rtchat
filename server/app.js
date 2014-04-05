@@ -62,6 +62,7 @@ app.initialize = function (peerServer) {
     });
 
     peerServer.on('disconnect', function (id) {
+        if (!users[id]) { return console.log('<<?' + id + ' already disconnected'); }
         var room = users[id].room;
         if (!room) { return console.log('<<?' + id + ' disconnected, but was not bounded to any room'); }
         console.log('    ' + id + ' was found in ' + room);
