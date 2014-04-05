@@ -1,4 +1,4 @@
-/* global App, Ember, moment */
+/* global App:true, Ember, Em, moment */
 (function () {
 
     App = Ember.Application.create();
@@ -10,20 +10,33 @@
         });
     });
 
+    App.RoomController = Em.ObjectController.extend({
+        actions: {
+            sendMessage: function (message) {
+                this.get('model').get('messages').pushObject({
+                    author: 'Name',
+                    content: message,
+                    date: Date()
+                });
+                this.set('message', '');
+            }
+        }
+    });
+
     App.RoomRoute = Ember.Route.extend({
         model: function () {
-            return {
+            return Em.Object.create({
                 messages: [{
                     author: 'Name',
                     content: 'Hello!',
                     date: Date()
-                },{
+                }, {
                     author: 'Anonymous',
                     content: 'Hi!',
                     date: Date()
                 }],
                 users: ['Name', 'Anonymous']
-            };
+            });
         }
     });
 
@@ -36,7 +49,7 @@
 
     App.JoinRoute = Ember.Route.extend({
         actions: {
-            goToLink: function(item) {
+            goToLink: function (item) {
                 App.ActiveRoomsView.rooms.addObject(item);
                 this.transitionTo('room.view', item);
             }
@@ -44,7 +57,7 @@
     });
 
     Ember.Handlebars.helper('format-date', function (value, options) {
-        return moment(value).calendar();
+        return moment(value).calendar(options);
     });
 
 // var peer = new Peer({
