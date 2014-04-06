@@ -36,6 +36,7 @@
             }
         },
         getConnection: function (id, cb) {
+            var self = this;
             if (connections[id]) {
                 console.log('Connection to ' + id + ' established: ', connections[id]);
                 return cb(connections[id]);
@@ -59,13 +60,6 @@
                 });
             });
         },
-        addUser: function (user) {
-            var users = this.get('users');
-            for (var i = users.length - 1; i >= 0; i--) {
-                if (users[i].id === user.id) { return false; }
-            }
-            return users.pushObject(user);
-        },
         createPeer: function () {
             var room = this.get('room.name');
             var id = this.get('id');
@@ -84,8 +78,16 @@
                     console.log('Message from ' + id + ': ', data);
                     if (!data.type) { return console.log('Malformed message from ' + id); }
                     if (data.type === 'GREETINGS') {
-                        self.addUser(data.user);
+                        self.get('users').addObject(data.user);
                     }
+                });
+                conn.on('close', function () {
+                    console.log('Connection to ' + id + ' closed');
+                    self.get('users').forEach(function (user) {
+                        if (user.id === id) {
+                            self.get('users').removeObject(user);
+                        }
+                    });
                 });
             });
             peer.on('open', this.fetchUsers.bind(this));
@@ -102,7 +104,7 @@
                                 id: id
                             });
                         }
-                        self.addUser(user);
+                        self.get('users').addObject(user);
                         if (user.id !== id) { self.greetUser(user); }
                     });
                 });
