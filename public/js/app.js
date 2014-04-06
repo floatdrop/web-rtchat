@@ -35,6 +35,8 @@
                     date: Date()
                 });
                 this.get('users').forEach(function (user) {
+                    if (user.id === self.get('id')) { return; }
+                    console.log('Broadcasting the message to ' + user.id);
                     self.getConnection(user.id, function (conn) {
                         conn.send({
                             type: 'MESSAGE',
@@ -48,8 +50,9 @@
             }
         },
         getConnection: function (id, cb) {
+            console.log(connections[id]);
             if (connections[id]) {
-                console.log('Connection to ' + id + ' established: ', connections[id]);
+                console.log('Connection to ' + id + ' from cache: ', connections[id]);
                 return cb(connections[id]);
             }
             console.log('Creating connection to ' + id);
