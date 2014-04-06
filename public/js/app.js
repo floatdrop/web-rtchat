@@ -78,7 +78,7 @@
                 .done(function (data) {
                     peers[room] = new Peer(data.id, {
                         host: '/',
-                        port: window.location.hostname === 'localhost' ? 5000 : 80,
+                        port: window.location.hostname === 'localhost' ? 8080 : 80,
                         path: '/api/'
                     });
                     peers[room].on('open', fetchUsers.bind(model, data.id));
