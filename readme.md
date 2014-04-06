@@ -10,4 +10,4 @@ Just type
 $ node server
 ```
 
-And then open [localhost:5000](http://localhost:5000).
+And then open [localhost:5000](http://localhost:8080).
