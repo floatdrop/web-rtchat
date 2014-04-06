@@ -1,10 +1,21 @@
 'use strict';
 
 var express = require('express');
-var app = express();
 var _ = require('lodash');
 var generateName = function () { return require('sillyname')().split(' ')[0]; };
 var uuid4 = require('uuid').v4;
+
+var app = express();
+
+function requireHTTPS(req, res, next) {
+    if (!req.secure) {
+        //FYI this should work for local development as well
+        return res.redirect('https://' + req.get('host') + req.url);
+    }
+    next();
+}
+
+app.use(requireHTTPS);
 
 app.use(express.static(__dirname + '/../public'));
 

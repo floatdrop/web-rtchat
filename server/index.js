@@ -1,6 +1,9 @@
 'use strict';
 
 var PeerServer = require('peer').PeerServer;
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
 
 if (process.env.NODETIME) {
     require('nodetime').profile({
@@ -18,15 +21,22 @@ if (process.env.SUBDOMAIN) {
 
 var app = require('./app');
 
-var server = app.listen(port);
+var options = {
+    key: fs.readFileSync(__dirname + '/../ssl/self_signed/server.key'),
+    cert: fs.readFileSync(__dirname + '/../ssl/self_signed/server.crt'),
+    ca: fs.readFileSync(__dirname + '/../ssl/self_signed/ca.crt'),
+};
 
-var peerServer = PeerServer({
+// Create an HTTPS service identical to the HTTP service.
+var sslServer = https.createServer(options, app).listen(port, function () {
+    console.log('Secure Express server listening on port ' + port);
+});
+
+var peerServer = new PeerServer({
     path: '/api/',
-    server: server
+    server: sslServer
 });
 
 app.use(peerServer);
 
 app.initialize(peerServer);
-
-console.log('Server listening on port ' + port);
