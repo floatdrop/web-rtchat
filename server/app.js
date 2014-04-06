@@ -7,14 +7,14 @@ var uuid4 = require('uuid').v4;
 
 var app = express();
 
-function requireHTTPS(req, res, next) {
-    if (!req.secure) {
-        return res.redirect('https://' + req.get('host') + req.url);
-    }
-    next();
-}
+// function requireHTTPS(req, res, next) {
+//     if (!req.secure) {
+//         return res.redirect('https://' + req.get('host') + req.url);
+//     }
+//     next();
+// }
 
-app.use(requireHTTPS);
+// app.use(requireHTTPS);
 
 app.use(express.static(__dirname + '/../public'));
 
