@@ -36,31 +36,34 @@
                 });
                 this.get('users').forEach(function (user) {
                     if (user.id === self.get('id')) { return; }
-                    console.log('Broadcasting the message to ' + user.id);
                     self.getConnection(user.id, function (conn) {
-                        conn.send({
+                        var data = {
                             type: 'MESSAGE',
                             user: self.get('user'),
                             date: Date(),
+                            room: self.get('room.name'),
                             message: message
-                        });
+                        };
+                        console.log('<<< MESSAGE ' + user.id + ': ', data);
+                        conn.send(data);
                     });
                 });
                 this.set('message', '');
             }
         },
         getConnection: function (id, cb) {
-            console.log(connections[id]);
+            if (!id) { return console.log('!!! getConnection called without id'); }
             if (connections[id]) {
-                console.log('Connection to ' + id + ' from cache: ', connections[id]);
+                console.log('<<< CACHED CONNETION ' + id + ': ', connections[id]);
                 return cb(connections[id]);
             }
-            console.log('Creating connection to ' + id);
             var peer = peers[this.get('room.name')];
             var conn = peer.connect(id);
+            if (!conn) { return console.log('!!! Failed to fetch connection for ' + id); }
+            console.log('!!! CACHING ' + id + ': ', conn);
+            connections[id] = conn;
             conn.on('open', function () {
-                console.log('Connection to ' + id + ' established: ', conn);
-                connections[id] = conn;
+                console.log('<<< CONNETION ' + id + ': ', connections[id]);
                 cb(conn);
             });
         },
@@ -68,10 +71,13 @@
             var self = this;
             console.log('Greeting user ', user);
             this.getConnection(user.id, function (conn) {
-                conn.send({
+                var data = {
                     type: 'GREETINGS',
-                    user: self.get('user')
-                });
+                    user: self.get('user'),
+                    room: self.get('room.name')
+                };
+                console.log('<<< GREETINGS ' + user.id + ': ', data);
+                conn.send(data);
             });
         },
         createPeer: function () {
@@ -86,16 +92,18 @@
                 path: '/api/'
             });
             peer.on('connection', function (conn) {
-                console.log('Incoming connection', conn);
+                console.log('>>> CONNECTION: ', conn);
                 var id = conn.peer;
                 conn.on('data', function (data) {
-                    console.log('Message from ' + id + ': ', data);
+                    // console.log('Message from ' + id + ': ', data);
                     if (!data.type) { return console.log('Malformed message from ' + id); }
                     if (data.type === 'GREETINGS') {
-                        self.get('users').addObject(data.user);
+                        console.log('>>> GREETINGS ' + id + ': ', data);
+                        rooms[data.room].get('users').addObject(data.user);
                     }
                     if (data.type === 'MESSAGE') {
-                        self.get('messages').pushObject({
+                        console.log('>>> MESSAGE ' + id + ': ', data);
+                        rooms[data.room].get('messages').pushObject({
                             author: data.user.name,
                             content: data.message,
                             date: data.data
@@ -119,13 +127,13 @@
             $.getJSON('/api/folks/' + this.get('room.name'))
                 .done(function (folks) {
                     folks.forEach(function (user) {
+                        self.get('users').addObject(user);
                         if (user.id === id) {
-                            self.set('user', {
+                            return self.set('user', {
                                 name: user.name,
                                 id: id
                             });
                         }
-                        self.get('users').addObject(user);
                         if (user.id !== id) { self.greetUser(user); }
                     });
                 });
@@ -152,6 +160,7 @@
                 });
 
             rooms[room] = model;
+            App.ActiveRoomsView.rooms.addObject(room);
 
             return model;
         }

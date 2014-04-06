@@ -29,14 +29,16 @@ app.get('/api/folks/:room', function (req, res, next) {
     if (!room) { return res.send(400); }
     if (!rooms[room]) { return res.send(404); }
 
-    console.log('--- Fetched folks for ' + room + ' room');
-
-    res.json(_.map(rooms[room].users, function (user) {
+    var data = _.map(rooms[room].users, function (user) {
         return {
             id: user,
             name: users[user].name
         };
-    }));
+    });
+
+    console.log('--- Fetched ' + data.length + ' folks  for ' + room + ' room');
+
+    res.json(data);
 });
 
 app.get('/api/room/:room', function (req, res, next) {
