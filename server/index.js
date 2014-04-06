@@ -12,7 +12,7 @@ if (process.env.NODETIME) {
     });
 }
 
-var port = Number(process.env.PORT || 5000),
+var port = Number(process.env.PORT || 8080),
     url  = 'http://localhost:' + port + '/';
 
 if (process.env.SUBDOMAIN) {

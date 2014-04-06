@@ -9,7 +9,7 @@ describe('Swarming server', function () {
     it('should return index page', function (done) {
         request(app)
             .get('/')
-            .expect(200)
+            .expect(302)
             .end(done);
     });
 });

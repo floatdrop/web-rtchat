@@ -9,7 +9,6 @@ var app = express();
 
 function requireHTTPS(req, res, next) {
     if (!req.secure) {
-        //FYI this should work for local development as well
         return res.redirect('https://' + req.get('host') + req.url);
     }
     next();
@@ -29,6 +28,8 @@ app.get('/api/folks/:room', function (req, res, next) {
     var room = req.params.room;
     if (!room) { return res.send(400); }
     if (!rooms[room]) { return res.send(404); }
+
+    console.log('--- Fetched folks for ' + room + ' room');
 
     res.json(_.map(rooms[room].users, function (user) {
         return {
