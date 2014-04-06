@@ -10,7 +10,7 @@
     "test": "mocha tests/*.test.js -R spec",
     "start": "node server"
   },
-  "version": "0.0.4-1",
+  "version": "0.0.4-2",
   "dependencies": {
     "bower": "^0.6.0",
     "express": "^3.5.1",
