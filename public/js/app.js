@@ -27,16 +27,27 @@
         name: 'Unknown',
         actions: {
             sendMessage: function () {
+                var self = this;
+                var message = this.get('message');
                 this.get('messages').pushObject({
                     author: this.get('user.name'),
-                    content: this.get('message'),
+                    content: message,
                     date: Date()
+                });
+                this.get('users').forEach(function (user) {
+                    self.getConnection(user.id, function (conn) {
+                        conn.send({
+                            type: 'MESSAGE',
+                            user: self.get('user'),
+                            date: Date(),
+                            message: message
+                        });
+                    });
                 });
                 this.set('message', '');
             }
         },
         getConnection: function (id, cb) {
-            var self = this;
             if (connections[id]) {
                 console.log('Connection to ' + id + ' established: ', connections[id]);
                 return cb(connections[id]);
@@ -79,6 +90,13 @@
                     if (!data.type) { return console.log('Malformed message from ' + id); }
                     if (data.type === 'GREETINGS') {
                         self.get('users').addObject(data.user);
+                    }
+                    if (data.type === 'MESSAGE') {
+                        self.get('messages').pushObject({
+                            author: data.user.name,
+                            content: data.message,
+                            date: data.data
+                        });
                     }
                 });
                 conn.on('close', function () {
