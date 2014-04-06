@@ -64,8 +64,10 @@ app.get('/api/room/:room', function (req, res, next) {
 
 app.initialize = function (peerServer) {
     peerServer.on('connection', function (id) {
+        console.log('>>> ' + id + ' connecting');
         var room = pending[id];
         delete pending[id];
+        if (!rooms[room]) { return console.log('>>? Room ' + room + ' is not exist'); }
         rooms[room].users.push(id);
         users[id] = {
             name: generateName(),
