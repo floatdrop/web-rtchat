@@ -50,9 +50,9 @@
     </script>
 
     <script type="text/x-handlebars" id="users-list">
-        <h4 class="text-muted" {{action alertModel target="controller"}}>Users:</h4>
-        {{#each user in model.users}}
-            <p>{{user.name}}</p>
+        <h4 class="text-muted">Users:</h4>
+        {{#each user in users}}
+            <p>{{user}}</p>
         {{/each}}
     </script>
 

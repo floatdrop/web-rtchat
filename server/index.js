@@ -1,6 +1,6 @@
 'use strict';
 
-var PeerServer = require('peer').PeerServer;
+var PeerServer = require('./peer').PeerServer;
 // var fs = require('fs');
 // var http = require('http');
 // var https = require('https');
@@ -28,6 +28,10 @@ var server = app.listen(port, function () {
 var peerServer = new PeerServer({
     path: '/api/',
     server: server
+});
+
+peerServer.on('trace', function (data) {
+    console.log(data);
 });
 
 app.use(peerServer);

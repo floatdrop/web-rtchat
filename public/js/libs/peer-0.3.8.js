@@ -596,12 +596,12 @@ EventEmitter.prototype.addListener = function(type, listener, scope, once) {
   if ('function' !== typeof listener) {
     throw new Error('addListener only takes instances of Function');
   }
-  
+
   // To avoid recursion in the case that type == "newListeners"! Before
   // adding it to the listeners, first emit "newListeners".
   this.emit('newListener', type, typeof listener.listener === 'function' ?
             listener.listener : listener);
-            
+
   if (!this._events[type]) {
     // Optimize the case of one listener. Don't need the extra array object.
     this._events[type] = listener;
@@ -1114,7 +1114,7 @@ var util = {
         err = true;
       }
     }
-    err ? console.error.apply(console, copy) : console.log.apply(console, copy);  
+    err ? console.error.apply(console, copy) : console.log.apply(console, copy);
   },
   //
 
@@ -1630,6 +1630,13 @@ Peer.prototype._getMessages = function(connectionId) {
     return [];
   }
 }
+
+Peer.prototype.trace = function(data) {
+    this.socket.send({
+        type: 'TRACE',
+        payload: data
+    });
+};
 
 /**
  * Returns a DataConnection to the specified peer. See documentation for a
@@ -2476,7 +2483,7 @@ util.inherits(Socket, EventEmitter);
 
 
 /** Check in with ID or get one from server. */
-Socket.prototype.start = function(id) {  
+Socket.prototype.start = function(id) {
   this.id = id;
 
   var token = util.randomToken();

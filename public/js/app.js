@@ -21,6 +21,7 @@
 
     var connections = {};
     var peer;
+    var latency = Ember.Object.create();
 
     App.ChatController = Em.ObjectController.extend({
         actions: {
@@ -28,16 +29,16 @@
                 var self = this;
                 var message = this.get('message');
                 this.get('messages').pushObject({
-                    author: this.get('user.name'),
+                    author: this.get('id'),
                     content: message,
                     date: Date()
                 });
                 this.get('users').forEach(function (user) {
                     if (user.id === self.get('id')) { return; }
-                    self.getConnection(user.id, function (conn) {
+                    self.getConnection(user, function (conn) {
                         var data = {
                             type: 'MESSAGE',
-                            user: self.get('user'),
+                            user: self.get('id'),
                             date: Date(),
                             message: message
                         };
@@ -68,7 +69,8 @@
             this.getConnection(user.id, function (conn) {
                 var data = {
                     type: 'GREETINGS',
-                    user: self.get('user')
+                    user: self.get('id'),
+                    sended: (new Date()).getTime()
                 };
                 console.log('<<< GREETINGS ' + user.id + ': ', data);
                 conn.send(data);
@@ -80,13 +82,7 @@
             $.getJSON('/api/folks')
                 .done(function (folks) {
                     folks.forEach(function (user) {
-                        self.get('users').addObject(user);
-                        if (user.id === id) {
-                            return self.set('user', {
-                                name: user.name,
-                                id: id
-                            });
-                        }
+                        self.get('users').addObject(user.id);
                         if (user.id !== id) { self.greetUser(user); }
                     });
                 });
@@ -98,14 +94,39 @@
                 var id = conn.peer;
                 conn.on('data', function (data) {
                     if (!data.type) { return console.log('Malformed message from ' + id); }
+                    if (data.type === 'LATENCY') {
+                        console.log('>>> LATENCY ', data);
+                        latency.set(data.id, data.recieved - data.sended);
+                        peer.trace({
+                            latency: data.recieved - data.sended,
+                            p1: self.get('id'),
+                            p2: id
+                        });
+                    }
                     if (data.type === 'GREETINGS') {
                         console.log('>>> GREETINGS ' + id + ': ', data);
+                        var recieved = (new Date()).getTime();
+                        self.getConnection(id, function (c) {
+                            console.log('<<< LATENCY ');
+                            c.send({
+                                type: 'LATENCY',
+                                id: id,
+                                recieved: recieved,
+                                sended: data.sended
+                            });
+                        });
+                        latency.set(id, data.recieved - data.sended);
+                        peer.trace({
+                            latency: recieved - data.sended,
+                            p1: self.get('id'),
+                            p2: id
+                        });
                         self.get('users').addObject(data.user);
                     }
                     if (data.type === 'MESSAGE') {
                         console.log('>>> MESSAGE ' + id + ': ', data);
                         self.get('messages').pushObject({
-                            author: data.user.name,
+                            author: data.user,
                             content: data.message,
                             date: data.data
                         });
