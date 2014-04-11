@@ -174,11 +174,17 @@
         actions: {
             goToLink: function (nick) {
                 var self = this;
+                $('#joinbutton').prop('disabled', 'disabled');
+                $('#joinbutton').text('Wait a second...');
                 this.createPeer(nick, function (err) {
+                    $('#joinbutton').prop('disabled', false);
+                    $('#joinbutton').text('Join');
                     if (!err) {
+                        $('#warn').addClass('hidden');
+                        $('#joinbutton').prop('disabled', false);
                         self.transitionTo('/chat');
                     } else {
-                        console.log(err);
+                        $('#warn').removeClass('hidden');
                     }
                 });
 

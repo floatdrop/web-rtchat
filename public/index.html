@@ -63,8 +63,9 @@
 
     <script type="text/x-handlebars" id="join">
         <div class="jumbotron">
+            <div id="warn" class="alert alert-warning hidden">This nickname already taken, try another one!</div>
           <p>{{input value=nickname id='nickname' class="form-control input-lg" placeholder="Your nick name"}}</p>
-          <p><a {{action goToLink nickname}} class="btn btn-lg btn-success" role="button">Join</a></p>
+          <p><button {{action goToLink nickname}} class="btn btn-lg btn-success" role="button" id="joinbutton">Join</button></p>
         </div>
     </script>
 
