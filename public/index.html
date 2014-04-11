@@ -50,10 +50,12 @@
     </script>
 
     <script type="text/x-handlebars" id="users-list">
-        <h4 class="text-muted">Users:</h4>
-        {{#each user in users}}
-            <p>{{user}}</p>
-        {{/each}}
+        <div style='max-height: 500px'>
+            <h4 class="text-muted">Users:</h4>
+            {{#each user in users}}
+                <p>{{user}}</p>
+            {{/each}}
+        </div>
     </script>
 
     <script type="text/x-handlebars" id="chat-messages">
