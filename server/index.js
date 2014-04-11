@@ -30,9 +30,19 @@ var peerServer = new PeerServer({
     server: server
 });
 
-peerServer.on('trace', function (data) {
-    console.log(data);
-});
+if (process.env.MONGO_CS) {
+    var MongoClient = require('mongodb').MongoClient;
+    MongoClient.connect(process.env.MONGO_CS, function (err, db) {
+        if (err) { throw err; }
+        peerServer.on('trace', function (data) {
+            data.date = Date();
+            db.collection('latency').insert(data, function () {
+                if (err) { console.log(err); }
+                console.log(data.p1 + ' --- ' + data.latency + ' --> ' + data.p2);
+            });
+        });
+    });
+}
 
 app.use(peerServer);
 
