@@ -21,15 +21,14 @@
     <script type="text/x-handlebars">
         <div class="container">
             <div class="header">
-                {{view App.ActiveRoomsView}}
-                <h3 class="text-muted">Swarm</h3>
+                <h3 class="text-muted">Web-RTChat</h3>
             </div>
 
             {{outlet}}
         </div>
     </script>
 
-    <script type="text/x-handlebars" id="room">
+    <script type="text/x-handlebars" id="chat">
         <div class="chat">
           <div class="row">
             <div class="col-md-8">
@@ -64,22 +63,9 @@
 
     <script type="text/x-handlebars" id="join">
         <div class="jumbotron">
-          <p>{{input value=roomName id='roomToJoin' class="form-control input-lg" placeholder="Funny-name"}}</p>
-          <p><a {{action goToLink roomName}} class="btn btn-lg btn-success" role="button">Join</a></p>
+          <p>{{input value=nickname id='nickname' class="form-control input-lg" placeholder="Your nick name"}}</p>
+          <p><a {{action goToLink nickname}} class="btn btn-lg btn-success" role="button">Join</a></p>
         </div>
-    </script>
-
-    <script type="text/x-handlebars" id="active-rooms">
-        <ul class="nav nav-pills pull-right">
-            {{#link-to "join" tagName="li" href=false}}<a {{bind-attr href="view.href"}}>Rooms</a>{{/link-to}}
-            {{#each room in view.rooms}}
-                {{#link-to "room" room tagName="li" class="permalink"}}
-                    {{#link-to "room" room}}
-                        {{room}}
-                    {{/link-to}}
-                {{/link-to}}
-            {{/each}}
-        </ul>
     </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>

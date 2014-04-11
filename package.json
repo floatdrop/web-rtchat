@@ -1,5 +1,5 @@
 {
-  "name": "swarming",
+  "name": "web-rtchat",
   "private": true,
   "author": {
     "name": "Vsevolod Strukchinsky",
@@ -10,7 +10,7 @@
     "test": "mocha tests/*.test.js -R spec",
     "start": "node server"
   },
-  "version": "0.0.4-6",
+  "version": "0.0.4-7",
   "dependencies": {
     "bower": "^0.6.0",
     "express": "^3.5.1",
