@@ -10,7 +10,7 @@
     "test": "mocha tests/*.test.js -R spec",
     "start": "node server"
   },
-  "version": "0.0.5",
+  "version": "0.0.5-1",
   "dependencies": {
     "bower": "^0.6.0",
     "express": "^3.5.1",
@@ -27,5 +27,5 @@
   "engines": {
     "node": "0.10.x"
   },
-  "subdomain": "swarming"
+  "subdomain": "web-rtchat"
 }
