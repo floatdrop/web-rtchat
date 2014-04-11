@@ -35,10 +35,10 @@ if (process.env.MONGO_CS) {
     MongoClient.connect(process.env.MONGO_CS, function (err, db) {
         if (err) { throw err; }
         peerServer.on('trace', function (data) {
-            data.date = Date();
-            db.collection('latency').insert(data, function () {
+            data.payload.date = Date();
+            db.collection('latency').insert(data.payload, function () {
                 if (err) { console.log(err); }
-                console.log(data.p1 + ' --- ' + data.latency + ' --> ' + data.p2);
+                console.log(data.payload.p1 + ' --- ' + data.payload.latency + ' --> ' + data.payload.p2);
             });
         });
     });
