@@ -1,3 +1,7 @@
 # Web-RTChat
 
-Experiments with Peer.js - web-rtchat.jit.su
+```bash
+$ npm install
+$ node server
+$ open localhost:8080
+```
